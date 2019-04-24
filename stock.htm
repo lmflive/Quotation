@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <title>小盘股资金流向 - 虫子出品</title>
+    <style type="text/css">
+        body
+        {
+            font-size: 9pt;
+        }
+        .block
+        {
+            width: 153px;
+            border: 1px dashed silver;
+            display:inline-block;
+        }
+        .row
+        {
+            height: 16px;
+        }
+        .left
+        {
+            width: 50px;
+            height: 10px;
+            display: inline-block;
+        }
+        .green0, .red0
+        {
+            width: 50px;
+            height: 10px;
+            display: inline-block;
+        }
+        .green1
+        {
+            background-color: green;
+            height: 100%;
+            width: 0;
+            float: right;
+        }
+        .red1
+        {
+            background-color: red;
+            height: 100%;
+            width: 0;
+        }
+    </style>
+    <script src="http://cdn.staticfile.org/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var total = 0;
+        $(document).ready(
+        function () {
+            listall();
+        });
+
+        function listall() {
+            total = 0;
+            var stklist = 'sz300216,sz002870,sh603177,sh603488,sh603226,sh603079,sh603045,sh603683,sz002862,sh603617,sz300715,sz002836,sz002882,sh603787,sh603040,sh603038,sz002909,sh603976,sz300509,sh603797,sh603159,sz002915,sz300611,sh603029,sz300591,sz300669,sz300554,sz002835,sz300488,sz002890,sz300606,sh603041,sh603637,sz002883,sz300680,sz300535,sz300557,sh603685,sz300710,sh603090,sz300417,sz300626,sh603607,sz300539,sz300632,sz300622,sz300668,sz002813,sh603031,sh603628,sz002881,sz300716,sz300612,sh603269,sz300629,sz300711,sz300658,sh603758,sz300543,sh603136,sh603922,sz300526,sz002940,sz300650,sh603676,sz300697,sz300721,sz300717,sh603790,sz002919,sz300643,sz300530,sh603895,sz002830,sz300515,sh603165,sz300722,sz300585,sh603958,sz300354,sz300727,sz002888,sh603098,sz002802,sz300742,sh603331,sz300563,sz300538,sh603768,sz300698,sz002801,sz300729,sh603283,sh603677,sh603506,sh603880,sz300665,sz300581,sz300649,sz300592,sz300652,sz300756,sz300615,sz002917,sh603326,sh603330,sh603813,sz300517,sh603196,sh603076,sz002932,sz300522,sz300681,sz300553,sh603928,sz300620,sz002774,sh603266,sh603178,sh603767,sz300619,sz300576,sh603937,sh603580,sh603238,sz002871,sz300028,sh603578,sh603477,sz300719,sz300671,sh603386,sz300720,sh603933,sz002323,sz002931,sh603192,sh603320,sh603757,sz300636,sh603316,sh603657,sz300621,sz300402,sz002856,sh603991,sz002943,sz300589,sh603286,sz002811,sh603596,sz300640,sh603860,sh603655,sh603229,sz300617,sh603089,sh603500,sh603351,sz300605,sz002942,sz300635,sz300753,sh603909,sh603110,sh603908,sh603629,sz002800,sh603036,sz002817,sh603536,sz002898,sh603380,sh603101,sh603416,sz300689,sh603139,sh603200,sh603615,sz002865,sz002855,sz002875,sh603810,sz002868,sh603389,sz002825,sz002849,sh603059,sh603663,sh603499,sz002877,sh603321,sz002846,sz300610,sz300701,sz002857,sh603709,sz002260,sz300743,sz300767';
+            var stks = stklist.split(',');
+            stks.sort();
+            for (var j = 0; j < stks.length; j++) {
+                var stkcode = stks[j];
+                getstk(stkcode);
+            }
+        }
+
+        function getstk(stkcode) {
+            $('#' + stkcode).fadeOut();
+            $.get('http://qt.gtimg.cn/?q=ff_' + stkcode + '&_=' + Math.random(),
+            function (data, status) {
+                if (data.length > 50) {
+                    var parts = data.split('~');
+                    var stkcode = parts[0].split('"')[1];
+                    var stkname = parts[12];
+                    var fl = [], fl_date = [];
+                    fl[0] = parts[3];
+                    fl_date[0] = parts[13];
+                    var arr14 = parts[14].split('^');
+                    fl_date[1] = arr14[0];
+                    fl[1] = arr14[1] - arr14[2];
+                    var arr15 = parts[15].split('^');
+                    fl_date[2] = arr15[0];
+                    fl[2] = arr15[1] - arr15[2];
+                    var arr16 = parts[16].split('^');
+                    fl_date[3] = arr16[0];
+                    fl[3] = arr16[1] - arr16[2];
+                    var arr17 = parts[17].split('^');
+                    fl_date[4] = arr17[0];
+                    fl[4] = arr17[1] - arr17[2];
+                    var max = 0;
+                    for (var f in fl) {
+                        if (Math.abs(fl[f]) >= max) max = Math.abs(fl[f]);
+                    }
+                    var html = gethtml(stkcode, stkname, fl, fl_date, max);
+                    if ($('#' + stkcode).length > 0) {
+                        $('#' + stkcode).html(html);
+                    }
+                    else {
+                        $('#content').append(html);
+                    }
+                    $('#' + stkcode).fadeIn();
+                }
+            });
+        }
+
+        function gethtml(stkcode, stkname, fl, fl_date,max) {
+            total++;
+            var rate = max > 5000 ? (max / 50) : 100;
+            var s = "<div class=block id="+ stkcode+"><a href=http://gu.qq.com/" + stkcode + " target="+stkcode +">" + stkname + "</a>&nbsp; <a href=javascript:getstk('"+stkcode+"');void(0); >刷新</a>";
+            for (var i = 0; i < fl.length; i++) {
+                s += "<div class=row><div class=left>" + Math.round(fl[i]) + "</div><div class=green0><div class=green1 style='width:" + -1*Math.round(fl[i] / rate) + "'></div></div><div class=red0><div class=red1 style='width:" + Math.round(fl[i] / rate) + "'></div></div></div>";
+            }
+            s += "</div>";
+            return s;
+        }
+
+    </script>
+</head>
+<body>
+<div id="content"></div>
+</body>
+</html>
