@@ -64,7 +64,7 @@
 
         function getstk(stkcode) {
             $('#' + stkcode).fadeOut();
-            $.get('http://qt.gtimg.cn/?q=ff_' + stkcode + '&_=' + Math.random(),
+            $.get('https://qt.gtimg.cn/?q=ff_' + stkcode + '&_=' + Math.random(),
             function (data, status) {
                 if (data.length > 50) {
                     var parts = data.split('~');
