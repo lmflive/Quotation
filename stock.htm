@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=10">
-    <title>小盘股资金流向 - 虫子出品</title>
+    <title>小盘股资金流向 - 码农出品</title>
     <style type="text/css">
         body
         {
@@ -43,7 +43,7 @@
             width: 0;
         }
     </style>
-    <script src="jquery-2.2.0.min.js"></script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
     <script type="text/javascript">
         var total = 0;
         $(document).ready(
@@ -105,7 +105,7 @@
             total++;
             var rate = max > 5000 ? (max / 50) : 100;
             var s = "<div class=block id="+ stkcode+"><a href=http://gu.qq.com/" + stkcode + " target="+stkcode +">" + stkname + "</a>&nbsp; <a href=javascript:getstk('"+stkcode+"');void(0); >刷新</a>";
-            for (var i = 0; i < fl.length; i++) {
+            for (var i = 4; i >=0; i--) {
                 s += "<div class=row><div class=left>" + Math.round(fl[i]) + "</div><div class=green0><div class=green1 style='width:" + -1*Math.round(fl[i] / rate) + "'></div></div><div class=red0><div class=red1 style='width:" + Math.round(fl[i] / rate) + "'></div></div></div>";
             }
             s += "</div>";
