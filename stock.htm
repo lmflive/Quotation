@@ -1,6 +1,7 @@
 <html>
 <head>
-    <title>小盘股资金流向 - 码农出品</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <title>A股5日资金流向</title>
     <style type="text/css">
         body
         {
@@ -57,11 +58,7 @@
             var stks = stklist.split(',');
             stks.sort();
             for (var j = 0; j < stks.length; j++) {
-                var stkcode = stks[j];
-                getstk(stkcode);
-                if (j % 200 == 199) {
-                    break;
-                }
+                getstk(stks[j]);
             }
         }
 
@@ -106,7 +103,7 @@
 
         function gethtml(stkcode, stkname, fl, fl_date,max) {
             total++;
-            $("span").text(total);
+            $("span").text("已加载:"+total);
             var rate = max > 5000 ? (max / 50) : 100;
             var s = "<div class=block id="+ stkcode+"><a href=http://gu.qq.com/" + stkcode + " target="+stkcode +">" + stkname + "</a>&nbsp; <a href=javascript:getstk('"+stkcode+"');void(0); >刷新</a>";
             for (var i = 4; i >=0; i--) {
