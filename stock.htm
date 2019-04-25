@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=10">
-    <title>两市股资金流向 - 码农出品</title>
+    <title>A股5日资金流向</title>
     <style type="text/css">
         body
         {
@@ -51,9 +51,9 @@
             listall();
         });
 
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms))
-        }
+//        function sleep(ms) {
+//          return new Promise(resolve => setTimeout(resolve, ms))
+//        }
 
         //async 
         function listall() {
@@ -65,7 +65,8 @@
             for (var j = 0; j < stks.length; j++) {
                 var stkcode = stks[j];
                 getstk(stkcode);
-                if(j%200==0){
+                if (j % 200 == 199) {
+                    break;
                     //await sleep(15000);
                 }
             }
@@ -125,7 +126,7 @@
     </script>
 </head>
 <body>
-<span></span>
 <div id="content"></div>
+<span>加载中..</span>
 </body>
 </html>
