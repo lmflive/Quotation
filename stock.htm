@@ -42,6 +42,42 @@
             height: 100%;
             width: 0;
         }
+		.vol-1{
+			color:green;
+		}		
+		.vol-2{
+			color:green;
+		}
+		.vol-3{
+			color:gray;
+		}
+		.vol-4{
+			color:orange;
+		}
+		.vol-5{
+			color:pink;
+		}
+		.vol-6{
+			color:red;
+		}
+		.pos-5{
+			color:red;
+		}
+		.pos-4{
+			color:pink;
+		}
+		.pos-3{
+			color:orange;
+		}
+		.pos-2{
+			color:gray;
+		}
+		.pos-1{
+			color:blue;
+		}
+		.pos-0{
+			color:green;
+		}
     </style>
     <script type="text/javascript" src="jquery-2.2.0.min.js"></script>
     <script type="text/javascript">
@@ -73,6 +109,7 @@
             $.get('https://qt.gtimg.cn/?q=ff_' + stkcode + '&_=' + Math.random(),
             function (data, status) {
                 if (data.length > 50) {
+			debugger;
                     var parts = data.split('~');
                     var stkcode = parts[0].split('"')[1];
                     var stkname = parts[12];
@@ -88,14 +125,14 @@
                     var arr16 = parts[16].split('^');
                     fl_date[3] = arr16[0];
                     fl[3] = arr16[1] - arr16[2];
-                    var arr17 = parts[17].split('^');
+                    var arr17 = parts[17].split('"')[0].split('^');
                     fl_date[4] = arr17[0];
                     fl[4] = arr17[1] - arr17[2];
                     var max = 0;
                     for (var f in fl) {
                         if (Math.abs(fl[f]) >= max) max = Math.abs(fl[f]);
                     }
-                    var html = gethtml(stkcode, stkname, fl, fl_date, max);
+                    var html = gethtml(stkcode, stkname, fl, fl_date, max, parseInt(parts[9]/10).toString().length);
                     if ($('#' + stkcode).length > 0) {
                         $('#' + stkcode).html(html);
                     }
@@ -107,11 +144,15 @@
             });
         }
 
-        function gethtml(stkcode, stkname, fl, fl_date,max) {
+        function gethtml(stkcode, stkname, fl, fl_date,max, vol) {
             loaded++;
-            $("span").text("已加载:"+loaded);
+            $("#progress").text("已加载:"+loaded);
+			var pos_count = 0;
+			for (var i = 4; i >=0; i--){
+				if(fl[i]>0) pos_count++;
+			}
             var rate = max > 5000 ? (max / 50) : 100;
-            var s = "<div class=block id="+ stkcode+"><a href=http://gu.qq.com/" + stkcode + " target="+stkcode +">" + stkname + "</a>&nbsp; <a href=javascript:getstk('"+stkcode+"');void(0); >刷新</a>";
+            var s = "<div class='block' id="+ stkcode+"><a href=http://gu.qq.com/" + stkcode + " target="+stkcode +">" + stkname + "</a>&nbsp; <a href=javascript:getstk('"+stkcode+"');void(0); >刷新</a><span style='float:right'><span class='vol-"+vol+"'>V"+vol+"</span><span class='pos-"+pos_count+"'>+"+pos_count+"</span></span>";
             for (var i = 4; i >=0; i--) {
                 s += "<div class=row><div class=left>" + Math.round(fl[i]) + "</div><div class=green0><div class=green1 style='width:" + -1*Math.round(fl[i] / rate) + "'></div></div><div class=red0><div class=red1 style='width:" + Math.round(fl[i] / rate) + "'></div></div></div>";
             }
